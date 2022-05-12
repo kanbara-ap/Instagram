@@ -1,0 +1,3 @@
+Pod/*
+*.xcworkspace
+GoogleService-Info.plist
