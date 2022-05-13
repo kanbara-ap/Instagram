@@ -35,11 +35,25 @@ class PostViewController: UIViewController {
                 print(error!)
                 SVProgressHUD.showError(withStatus: "画像のアップロードに失敗しました。")
                 self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
+                return
             }
+            let name = Auth.auth().currentUser?.displayName
+            let postDic = [
+                "name": name!,
+                "caption": self.textField.text!,
+                "date": FieldValue.serverTimestamp(),
+            ] as [String: Any]
+            postRef.setData(postDic)
+            SVProgressHUD.showSuccess(withStatus: "投稿しました")
+            self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
+            
+        
+            
         }
         
     }
     @IBAction func handleCancelButton(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
     }
     
 
