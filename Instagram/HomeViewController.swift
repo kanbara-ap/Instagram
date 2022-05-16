@@ -88,9 +88,57 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.setPostData(postArray[indexPath.row])
         
         cell.likeButton.addTarget(self, action: #selector(handleButton(_:forEvent:)), for: .touchUpInside)
+        
+        cell.commentButton.addTarget(self, action: #selector(handleCommentButton(_:forEvent:)), for: .touchUpInside)
         return cell
     }
     
+    @objc func handleCommentButton(_ sender: UIButton, forEvent event: UIEvent){
+        var alertTextField: UITextField?
+        let touch = event.allTouches?.first
+        let point = touch!.location(in: self.tableView)
+        let indexPath = self.tableView.indexPathForRow(at: point)
+
+        let alert = UIAlertController(
+            title: "Edit Comment",
+            message: "Enter new comment",
+            preferredStyle: UIAlertController.Style.alert)
+        alert.addTextField(
+            configurationHandler: {(textField: UITextField!) in
+                alertTextField = textField
+                // textField.placeholder = "Mike"
+                // textField.isSecureTextEntry = true
+        })
+        alert.addAction(
+            UIAlertAction(
+                title: "Cancel",
+                style: UIAlertAction.Style.cancel,
+                handler: nil))
+        alert.addAction(
+            UIAlertAction(
+                title: "OK",
+                style: UIAlertAction.Style.default) { _ in
+                if let text = alertTextField?.text {
+                    let postData = self.postArray[indexPath!.row]
+                    if let displayName = Auth.auth().currentUser?.displayName{
+                        
+                        var updateValueName : FieldValue
+                        var updateValueText : FieldValue
+                        updateValueName = FieldValue.arrayUnion([displayName])
+                        updateValueText = FieldValue.arrayUnion([text])
+                        let postRef = Firestore.firestore().collection(Const.PostPath).document(postData.id)
+                        postRef.updateData(["commentUser": updateValueName])
+                        postRef.updateData(["commentText": updateValueText])
+                        
+                    }
+                    
+                    
+                }
+            }
+        )
+
+        present(alert, animated: true, completion: nil)
+    }
 
     /*
     // MARK: - Navigation

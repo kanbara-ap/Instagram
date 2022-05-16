@@ -10,6 +10,8 @@ import FirebaseStorageUI
 
 class PostTableViewCell: UITableViewCell {
     
+    @IBOutlet weak var commentButton: UIButton!
+    @IBOutlet weak var commentText: UILabel!
     @IBOutlet weak var captionLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var likeLabel: UILabel!
@@ -27,12 +29,20 @@ class PostTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
+
     func setPostData(_ postData: PostData){
         postImageView.sd_imageIndicator =   SDWebImageActivityIndicator.gray
         let imageRef = Storage.storage().reference().child(Const.ImagePath).child(postData.id + ".jpg")
         postImageView.sd_setImage(with: imageRef)
         
         self.captionLabel.text = "\(postData.name!) : \(postData.caption!)"
+        
+//        for commentNumber in 1...postData.commentUser.count {
+//            self.commentUser.text = "\(postData.commentUser[commentNumber - 1])"
+//            self.commentText.text = "\(postData.commentText[commentNumber - 1])"
+//        }
+            self.commentText.text = postData.loadComment()
+        
         
         self.dateLabel.text = ""
         if let date = postData.date{
