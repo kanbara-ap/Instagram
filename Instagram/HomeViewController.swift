@@ -106,8 +106,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         alert.addTextField(
             configurationHandler: {(textField: UITextField!) in
                 alertTextField = textField
-                // textField.placeholder = "Mike"
-                // textField.isSecureTextEntry = true
+    
         })
         alert.addAction(
             UIAlertAction(
@@ -122,13 +121,13 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                     let postData = self.postArray[indexPath!.row]
                     if let displayName = Auth.auth().currentUser?.displayName{
                         
-                        var updateValueName : FieldValue
-                        var updateValueText : FieldValue
-                        updateValueName = FieldValue.arrayUnion([displayName])
-                        updateValueText = FieldValue.arrayUnion([text])
+                        
                         let postRef = Firestore.firestore().collection(Const.PostPath).document(postData.id)
-                        postRef.updateData(["commentUser": updateValueName])
-                        postRef.updateData(["commentText": updateValueText])
+                        postData.commentText += [text]
+                        postData.commentUser += [displayName]
+
+                        postRef.setData(["commentUser": postData.commentUser,"commentText": postData.commentText],merge: true)
+                        print("DEBUG_PRINT: コメントを投稿しました")
                         
                     }
                     

@@ -63,6 +63,8 @@ class PostTableViewCell: UITableViewCell {
             self.likeButton.setImage(buttonImage, for: .normal)
         }
         
+        commentText.layer.cornerRadius = 10
+        commentText.clipsToBounds = true
         
     }
     

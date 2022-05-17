@@ -15,8 +15,8 @@ class PostData: NSObject{
     var date: Date?
     var likes: [String] = []
     var isliked: Bool = false
-    var commentUser : [String] = []
-    var commentText : [String] = []
+    var commentUser : Array<String> = []
+    var commentText : Array<String> = []
     
     
     init(document: QueryDocumentSnapshot) {
@@ -50,11 +50,11 @@ class PostData: NSObject{
         var comment = "コメント一覧"
         if commentUser.count != 0{
             for commentNumber in 0...(commentUser.count - 1){
-                comment += "\n\(commentUser[commentNumber])\n\(commentText[commentNumber])"
+                comment += "\n\(commentUser[commentNumber])：\n　\(commentText[commentNumber])"
             }
             return comment
         }else{
-            comment += "\nコメントはありません"
+            comment += "\n　コメントはありません"
             return comment
         }
         
